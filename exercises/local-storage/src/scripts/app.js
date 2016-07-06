@@ -26,12 +26,13 @@ $(function() {
     $peopleList.empty();
 
     $.each(people, function(index, value) {
-      var facts;
+      var facts = "";
+      var id = people[index].id;
       $.each(value, function(key, value) {
         facts += key + ": " + value + '<br />';
       });
-      console.log($peopleList);
-      $peopleList.append('<li>'+facts+'</li>');
+      //console.log($peopleList);
+      $peopleList.append('<li data-id='+id+'>'+facts+'<button name="delete" type="button" value='+id+'>Delete</button></li>');
     });
   };
 
@@ -62,6 +63,12 @@ $(function() {
     // now get the form data, BUT, will only get
     // inputs with a name="" attribute
     var data = $form.serializeArray();
+    data.push({
+      name: 'id',
+      value: Date.now().toString()
+    });
+
+    //console.log('DATA', data);
 
     // transform.
     var person = makePerson(data);
@@ -84,6 +91,31 @@ $(function() {
         // .focus();
     $firstInput.focus();
     displayPeople();
+  });
+
+  var $delete = $('button[name="delete"]');
+
+  // When the delete button is clicked
+  $delete.click(function(evt) {
+    console.log('DELETE', $(this).attr('value'));
+
+    var hash = $(this).attr('value');
+
+
+    _.remove(people, function(obj) {
+      return obj.id === hash;
+    });
+
+    console.log(people);
+
+    localStorage.setItem(storageKey, JSON.stringify(people));
+
+    var $removed = $('li[data-id='+hash+']');
+
+    //console.log($removed);
+
+    $removed.remove();
+
   });
 
 });
