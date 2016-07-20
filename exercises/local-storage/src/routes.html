@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <base href="">
+  </head>
+
+  <body>
+
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <h1>routes</h1>
+          <div>Menu</div>
+          <ul>
+            <li><a href="#!show-all">show all</a></li>
+            <li><a href="#!show">show</a></li>
+            <li><a href="#!edit">edit</a></li>
+            <li><a href="#!not-found">not found</a></li>
+          </ul>
+          <div id="show-all">Show all</div>
+          <div id="show">Show one</div>
+          <div id="edit">Edit one</div>
+          <div id="not-found">Not found</div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../bower_components/page/page.js"></script>
+
+    <script>
+      $(function() {
+        console.log('Hello world');
+
+        var $showAll = $('#show-all'),
+            $show = $('#show'),
+            $edit = $('#edit'),
+            $notFound = $('#not-found'),
+            $all = [$showAll, $show, $edit, $notFound];
+
+        var hideAll = function() {
+          $.each($all, function(index, node) {
+            node.hide();
+          });
+        }
+
+        // Setup the base
+        $('base').attr('href', 'http://localhost:8001/src/routes.html');
+        page.base('/src/routes.html');
+
+        page('/', function() {
+          console.log('base route');
+          hideAll();
+          $showAll.show();
+          console.log('index route');
+        });
+
+        page('show-all', function() {
+          console.log('Show all');
+          hideAll();
+          $showAll.show();
+        });
+
+        page('show', function() {
+          console.log('Show One');
+          hideAll();
+          $show.show();
+        });
+
+        page('edit', function() {
+          console.log('Edit');
+          hideAll();
+          $edit.show();
+        });
+
+        page('nothing', function() {
+          console.log('nothing');
+          hideAll();
+        });
+
+        page(function() {
+          console.log('Last catchall');
+        });
+
+        // Starts the router
+        page({
+          hashbang: true
+        });
+
+      });
+    </script>
+
+  </body>
+</html>
